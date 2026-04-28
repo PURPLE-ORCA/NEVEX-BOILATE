@@ -6,16 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Text } from "@/components/ui/text";
+import { useAuthTypingImpulse, bumpParticleTypingImpulse, pulseParticleSubmitImpulse } from "@/components/views/auth/auth-shell";
 
 export function LoginForm() {
   return (
     <div className="w-full max-w-lg">
-      <Text as="p" className="font-mono uppercase tracking-[0.3em]" variant="muted">
+      <Text as="p" variant="muted">
         Welcome back
       </Text>
       
       <Text as="h1" className="mt-2" variant="h3">
-        Enter your orbit
+        Enter your App
       </Text>
       
       <Text className="mt-2" variant="muted">
@@ -33,7 +34,7 @@ function OrSeparator() {
   return (
     <div className="my-6 flex items-center gap-3">
       <Separator className="flex-1" />
-      <Text as="span" className="font-mono uppercase tracking-[0.3em]" variant="xs">
+      <Text as="span" variant="xs">
         or
       </Text>
       <Separator className="flex-1" />
@@ -43,6 +44,7 @@ function OrSeparator() {
 
 function MagicLinkForm() {
   const formRef = useRef<HTMLFormElement>(null);
+  const typingImpulse = useAuthTypingImpulse();
   const [email, setEmail] = useState("");
   const [sentTo, setSentTo] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -50,6 +52,7 @@ function MagicLinkForm() {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email.trim()) return;
+    pulseParticleSubmitImpulse(typingImpulse);
     setPending(true);
     window.setTimeout(() => {
       setSentTo(email.trim().toLowerCase());
@@ -62,6 +65,7 @@ function MagicLinkForm() {
       <form
         ref={formRef}
         onSubmit={onSubmit}
+        onKeyDown={(e) => bumpParticleTypingImpulse(typingImpulse, e)}
         className="mt-8 flex flex-col gap-4"
       >
         <div className="flex flex-col gap-1.5">
@@ -83,7 +87,7 @@ function MagicLinkForm() {
       </form>
 
       {sentTo ? (
-        <div className="mt-4 rounded-lg border border-border/70 bg-background/40 px-3 py-2">
+        <div className="mt-4 border border-border/70 bg-background/40 px-3 py-2">
           <Text variant="small">
             Link sent to <span className="text-foreground">{sentTo}</span>. Open your inbox to continue.
           </Text>

@@ -1,56 +1,75 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { createContext, useContext, useRef } from "react";
+import type { ReactNode, RefObject } from "react";
+import { ParticleField, bumpParticleTypingImpulse, pulseParticleSubmitImpulse } from "@/components/particle-field";
 import { Text } from "@/components/ui/text";
 
-export function AuthShell({ children }: { children: React.ReactNode }) {
+type ImpulseRef = RefObject<number>;
+const TypingImpulseContext = createContext<ImpulseRef | null>(null);
+
+export function useAuthTypingImpulse(): ImpulseRef {
+  const ctx = useContext(TypingImpulseContext);
+  if (!ctx) throw new Error("useAuthTypingImpulse outside <AuthShell>");
+  return ctx;
+}
+
+export function AuthShell({ children }: { children: ReactNode }) {
+  const typingImpulseRef = useRef(0);
+  
   return (
-    <div className="flex min-h-svh w-full">
-      {/* Left side - Visual */}
-      <div className="relative hidden w-1/2 overflow-hidden bg-background lg:block">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-muted via-background to-background" />
-        
-        {/* Animated particles/shapes */}
-        <div className="absolute inset-0">
-          <div className="absolute left-1/4 top-1/4 h-2 w-2 rounded-full bg-primary/20 animate-pulse" />
-          <div className="absolute left-1/3 top-1/2 h-3 w-3 rounded-full bg-primary/10 animate-pulse delay-300" />
-          <div className="absolute left-2/3 top-1/3 h-1.5 w-1.5 rounded-full bg-primary/30 animate-pulse delay-700" />
-          <div className="absolute left-1/2 top-3/4 h-2 w-2 rounded-full bg-primary/15 animate-pulse delay-500" />
-          <div className="absolute left-3/4 top-1/4 h-2.5 w-2.5 rounded-full bg-primary/25 animate-pulse delay-1000" />
-          <div className="absolute left-1/5 top-2/3 h-1 w-1 rounded-full bg-primary/20 animate-pulse delay-200" />
-          <div className="absolute left-3/5 top-1/5 h-2 w-2 rounded-full bg-primary/10 animate-pulse delay-600" />
-          <div className="absolute left-4/5 top-1/2 h-1.5 w-1.5 rounded-full bg-primary/20 animate-pulse delay-400" />
+    <TypingImpulseContext.Provider value={typingImpulseRef}>
+      <div className="flex min-h-svh w-full">
+        {/* Left side - Particle Field */}
+        <div className="relative hidden w-1/2 overflow-hidden bg-background lg:block">
+          <ParticleField
+            src="/orca-logs.png"
+            sampleStep={3}
+            threshold={34}
+            dotSize={1}
+            renderScale={1}
+            align="center"
+            typingImpulseRef={typingImpulseRef}
+            className="absolute inset-0"
+          />
+          
+          {/* Vignette overlay */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(900px 600px at 50% 50%, transparent 45%, color-mix(in srgb, var(--background) 88%, transparent) 92%)",
+            }}
+          />
+          
+          {/* Content overlay */}
+          <div className="pointer-events-none absolute inset-0 flex flex-col justify-between p-12">
+            <div className="pointer-events-auto flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-foreground" />
+              <Text className="font-mono tracking-[0.2em]" variant="small">
+                Purple Orca
+              </Text>
+            </div>
+
+            <div className="max-w-md space-y-4">
+              <Text className="font-mono uppercase tracking-[0.3em]" variant="xs">
+                Sign-in design
+              </Text>
+              <Text as="h2" variant="h3">
+                Split layout with a particle field on the left and a single centered form on the right.
+              </Text>
+            </div>
+          </div>
         </div>
 
-        {/* Gradient orb */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 flex h-full flex-col justify-between p-12">
-          <div className="flex items-center gap-2">
-            <span className="inline-block h-2 w-2 rounded-full bg-foreground" />
-            <Text className="font-mono tracking-[0.2em]" variant="small">
-              Sean&apos;s scratch pad
-            </Text>
-          </div>
-
-          <div className="space-y-4">
-            <Text className="font-mono uppercase tracking-[0.3em]" variant="xs">
-              Sign in design
-            </Text>
-            <Text as="h2" variant="h3">
-              Grid layout with a particle field on the left and a single centered form on the right.
-            </Text>
-          </div>
+        {/* Right side - Form */}
+        <div className="flex w-full items-center justify-center bg-background p-6 lg:w-1/2">
+          {children}
         </div>
       </div>
-
-      {/* Right side - Form */}
-      <div className="flex w-full items-center justify-center bg-background p-6 lg:w-1/2">
-        {children}
-      </div>
-    </div>
+    </TypingImpulseContext.Provider>
   );
 }
+
+export { bumpParticleTypingImpulse, pulseParticleSubmitImpulse };
