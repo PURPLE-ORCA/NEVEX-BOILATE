@@ -1,11 +1,10 @@
+import { AppContentHeader } from "@/components/layout/app/app-content-header";
 import { Text } from "@/components/ui/text";
 
 export default function AppPage() {
   return (
     <div className="flex flex-col gap-6 p-6">
-      <div className="flex items-center justify-between">
-        <Text as="h1" variant="h2">Dashboard</Text>
-      </div>
+      <AppContentHeader title="Dashboard" />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {[
