@@ -6,7 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Text } from "@/components/ui/text";
+import { OTPField, OTPFieldInput } from "@/components/ui/otp-field";
 import { useAuthTypingImpulse, bumpParticleTypingImpulse, pulseParticleSubmitImpulse } from "@/components/views/auth/auth-shell";
+
+const OTP_LENGTH = 6;
+
+const OTP_SLOT_KEYS = Array.from(
+  { length: OTP_LENGTH },
+  (_, i) => `otp-slot-${i}`,
+);
 
 export function LoginForm() {
   return (
@@ -48,6 +56,8 @@ function MagicLinkForm() {
   const [email, setEmail] = useState("");
   const [sentTo, setSentTo] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [otpValue, setOtpValue] = useState("");
+  const [otpPending, setOtpPending] = useState(false);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,6 +69,73 @@ function MagicLinkForm() {
       setPending(false);
     }, 600);
   };
+
+  const onOtpSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (otpValue.length !== OTP_LENGTH) return;
+    setOtpPending(true);
+    // Simulate OTP verification
+    window.setTimeout(() => {
+      setOtpPending(false);
+      // Here you would handle successful auth
+      alert("OTP verified successfully!");
+    }, 1000);
+  };
+
+  if (sentTo) {
+    return (
+      <div className="mt-8 space-y-6">
+        <div className="border border-border/70 bg-background/40 px-3 py-2">
+          <Text variant="small">
+            Code sent to <span className="text-foreground">{sentTo}</span>. Enter the code below.
+          </Text>
+        </div>
+
+        <form onSubmit={onOtpSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Text as="label" variant="small">
+              Verification code
+            </Text>
+            <OTPField 
+              aria-label="One-time password" 
+              length={OTP_LENGTH}
+              value={otpValue}
+              onValueChange={setOtpValue}
+            >
+              {OTP_SLOT_KEYS.map((slotKey, index) => (
+                <OTPFieldInput
+                  key={slotKey}
+                  aria-label={`Character ${index + 1} of ${OTP_LENGTH}`}
+                />
+              ))}
+            </OTPField>
+          </div>
+
+          <Button 
+            type="submit" 
+            size="lg" 
+            className="w-full" 
+            disabled={otpValue.length !== OTP_LENGTH || otpPending}
+          >
+            {otpPending ? "Verifying..." : "Verify code"}
+          </Button>
+        </form>
+
+        <div className="text-center">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => {
+              setSentTo(null);
+              setOtpValue("");
+            }}
+          >
+            Use a different email
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -82,17 +159,9 @@ function MagicLinkForm() {
         </div>
 
         <Button type="submit" size="lg" className="mt-2" disabled={pending}>
-          {pending ? "Sending..." : "Send sign-in link"}
+          {pending ? "Sending..." : "Send sign-in code"}
         </Button>
       </form>
-
-      {sentTo ? (
-        <div className="mt-4 border border-border/70 bg-background/40 px-3 py-2">
-          <Text variant="small">
-            Link sent to <span className="text-foreground">{sentTo}</span>. Open your inbox to continue.
-          </Text>
-        </div>
-      ) : null}
     </>
   );
 }

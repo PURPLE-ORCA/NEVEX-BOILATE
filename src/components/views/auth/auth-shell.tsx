@@ -21,7 +21,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
     <TypingImpulseContext.Provider value={typingImpulseRef}>
       <div className="flex min-h-svh w-full gap-6">
         {/* Left side - Particle Field */}
-        <div className="relative hidden w-1/2 overflow-hidden bg-background lg:block pl-12">
+        <div className="relative hidden w-1/2 overflow-hidden bg-background lg:block">
           <ParticleField
             src="/orca-logs.png"
             sampleStep={3}
