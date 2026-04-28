@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useRef } from "react";
 import type { ReactNode, RefObject } from "react";
-import { ParticleField, bumpParticleTypingImpulse, pulseParticleSubmitImpulse } from "@/components/particle-field";
+import { ParticleField, bumpParticleTypingImpulse, pulseParticleSubmitImpulse } from "@/components/ui/particle-field";
 import { Text } from "@/components/ui/text";
 
 type ImpulseRef = RefObject<number>;
@@ -19,17 +19,19 @@ export function AuthShell({ children }: { children: ReactNode }) {
   
   return (
     <TypingImpulseContext.Provider value={typingImpulseRef}>
-      <div className="flex min-h-svh w-full">
+      <div className="flex min-h-svh w-full gap-6">
         {/* Left side - Particle Field */}
-        <div className="relative hidden w-1/2 overflow-hidden bg-background lg:block">
+        <div className="relative hidden w-1/2 overflow-hidden bg-background lg:block pl-12">
           <ParticleField
             src="/orca-logs.png"
             sampleStep={3}
             threshold={34}
-            dotSize={1}
+            dotSize={1.2}
             renderScale={1}
             align="center"
             typingImpulseRef={typingImpulseRef}
+            adaptToTheme={false}
+            color="oklch(0.496 0.265 301.924 / 0.92)"
             className="absolute inset-0"
           />
           
