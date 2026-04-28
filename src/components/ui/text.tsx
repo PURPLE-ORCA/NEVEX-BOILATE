@@ -18,7 +18,7 @@ const textVariants = cva("text-foreground", {
       large: "text-lg text-foreground",
       p: "text-base text-foreground/70 ",
       subtitle:
-        "text-sm md:text-base text-muted-foreground font-medium tracking-wide",
+        "text-sm md:text-base text-muted-foreground",
       small: "text-sm leading-none",
       xs: "text-xs font-medium uppercase tracking-wider",
       muted: "text-sm text-muted-foreground",

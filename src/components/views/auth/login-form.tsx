@@ -92,10 +92,7 @@ function MagicLinkForm() {
         </div>
 
         <form onSubmit={onOtpSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Text as="label" variant="small">
-              Verification code
-            </Text>
+          <div className="space-y-2 place-self-center">
             <OTPField 
               aria-label="One-time password" 
               length={OTP_LENGTH}
