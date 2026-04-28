@@ -7,7 +7,7 @@ import {
 	NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { companyLinks, companyLinks2, productLinks } from "@/components/layout/nav-links";
-import { LinkItem } from "@/components/sheard";
+import { LinkItem } from "@/components/layout/sheard";
 
 export function DesktopNav() {
 	return (

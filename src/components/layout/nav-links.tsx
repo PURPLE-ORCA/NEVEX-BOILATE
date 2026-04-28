@@ -1,4 +1,4 @@
-import type { LinkItemType } from "@/components/sheard";
+import type { LinkItemType } from "@/components/layout/sheard";
 import { GlobeIcon, LayersIcon, UserPlusIcon, BarChart3Icon, PlugIcon, CodeIcon, UsersIcon, StarIcon, HandshakeIcon, FileTextIcon, ShieldIcon, RotateCcwIcon, LeafIcon, HelpCircleIcon } from "lucide-react";
 
 export const productLinks: LinkItemType[] = [
