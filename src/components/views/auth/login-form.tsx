@@ -1,6 +1,9 @@
 "use client";
 
 import { type FormEvent, useRef, useState } from "react";
+import { useAuthActions } from "@convex-dev/auth/react";
+import { ConvexError } from "convex/values";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +18,50 @@ const OTP_SLOT_KEYS = Array.from(
   { length: OTP_LENGTH },
   (_, i) => `otp-slot-${i}`,
 );
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function getAuthErrorMessage(error: unknown): string {
+  const message = getRawErrorMessage(error).toLowerCase();
+
+  if (message.includes("could not verify code")) {
+    return "Invalid code. Check digits and try again.";
+  }
+
+  if (message.includes("expired")) {
+    return "Code expired. Request a new one.";
+  }
+
+  if (message.includes("rate") || message.includes("too many")) {
+    return "Too many attempts. Wait, then try again.";
+  }
+
+  if (message.includes("email")) {
+    return "Enter a valid email address.";
+  }
+
+  return "Auth failed. Try again.";
+}
+
+function getRawErrorMessage(error: unknown): string {
+  if (error instanceof ConvexError) {
+    const data = error.data;
+
+    if (typeof data === "string") {
+      return data;
+    }
+
+    if (data && typeof data === "object" && "message" in data) {
+      return String(data.message);
+    }
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return "Unknown auth error";
+}
 
 export function LoginForm() {
   return (
@@ -51,6 +98,8 @@ function OrSeparator() {
 }
 
 function MagicLinkForm() {
+  const router = useRouter();
+  const { signIn } = useAuthActions();
   const formRef = useRef<HTMLFormElement>(null);
   const typingImpulse = useAuthTypingImpulse();
   const [email, setEmail] = useState("");
@@ -58,28 +107,58 @@ function MagicLinkForm() {
   const [pending, setPending] = useState(false);
   const [otpValue, setOtpValue] = useState("");
   const [otpPending, setOtpPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!EMAIL_REGEX.test(normalizedEmail)) {
+      setError("Enter a valid email address.");
+      return;
+    }
+
     pulseParticleSubmitImpulse(typingImpulse);
     setPending(true);
-    window.setTimeout(() => {
-      setSentTo(email.trim().toLowerCase());
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("email", normalizedEmail);
+
+      await signIn("resend-otp", formData);
+      setSentTo(normalizedEmail);
+      setOtpValue("");
+    } catch (err: unknown) {
+      setError(getAuthErrorMessage(err));
+    } finally {
       setPending(false);
-    }, 600);
+    }
   };
 
-  const onOtpSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onOtpSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (otpValue.length !== OTP_LENGTH) return;
+
+    if (!sentTo || otpValue.length !== OTP_LENGTH) {
+      return;
+    }
+
     setOtpPending(true);
-    // Simulate OTP verification
-    window.setTimeout(() => {
+    setError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("email", sentTo);
+      formData.append("code", otpValue);
+
+      await signIn("resend-otp", formData);
+      router.replace("/dashboard");
+    } catch (err: unknown) {
+      setError(getAuthErrorMessage(err));
+      setOtpValue("");
+    } finally {
       setOtpPending(false);
-      // Here you would handle successful auth
-      alert("OTP verified successfully!");
-    }, 1000);
+    }
   };
 
   if (sentTo) {
@@ -90,6 +169,12 @@ function MagicLinkForm() {
             Code sent to <span className="text-foreground">{sentTo}</span>. Enter the code below.
           </Text>
         </div>
+
+        {error ? (
+          <Text className="text-destructive" variant="small">
+            {error}
+          </Text>
+        ) : null}
 
         <form onSubmit={onOtpSubmit} className="space-y-4">
           <div className="space-y-2 place-self-center">
@@ -125,6 +210,7 @@ function MagicLinkForm() {
             onClick={() => {
               setSentTo(null);
               setOtpValue("");
+              setError(null);
             }}
           >
             Use a different email
@@ -151,9 +237,18 @@ function MagicLinkForm() {
             placeholder="you@example.com"
             autoComplete="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError(null);
+            }}
           />
         </div>
+
+        {error ? (
+          <Text className="text-destructive" variant="small">
+            {error}
+          </Text>
+        ) : null}
 
         <Button type="submit" size="lg" className="mt-2" disabled={pending}>
           {pending ? "Sending..." : "Send sign-in code"}
