@@ -2,6 +2,7 @@ import { Geist, Geist_Mono, Figtree } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/layout/theme-provider"
+import { ToastProvider } from "@/components/ui/toast"
 import { cn } from "@/lib/utils";
 
 const figtree = Figtree({subsets:['latin'],variable:'--font-sans'})
@@ -21,9 +22,13 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
       className={cn("antialiased", fontMono.variable, "font-sans", figtree.variable)}
-    >
+      >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <ToastProvider>
+            {children}
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
