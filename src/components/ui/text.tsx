@@ -122,6 +122,22 @@ function Text<T extends React.ElementType = "p">({
           {...props}
         />
       );
+    case "div":
+      return (
+        <div
+          ref={ref as React.Ref<HTMLDivElement>}
+          className={cn(textVariants({ variant, className }))}
+          {...props}
+        />
+      );
+    case "span":
+      return (
+        <span
+          ref={ref as React.Ref<HTMLSpanElement>}
+          className={cn(textVariants({ variant, className }))}
+          {...props}
+        />
+      );
     case "small":
       return (
         <small
