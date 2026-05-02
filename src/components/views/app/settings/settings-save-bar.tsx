@@ -8,7 +8,7 @@ interface SettingsSaveBarProps {
 
 export function SettingsSaveBar({ dirty, onDiscard }: SettingsSaveBarProps) {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border/60 bg-background/85 backdrop-blur">
+    <div className="mt-8 border-t border-border/60 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-3xl items-center justify-between px-8 py-3">
         <Text variant="xs" className="font-mono tracking-[0.3em]">
           {dirty ? "Unsaved changes" : "All saved"}
