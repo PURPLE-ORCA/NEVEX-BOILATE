@@ -57,5 +57,3 @@ export const dashboardFacts: DashboardFact[] = [
   { label: "Focus", value: "3h 12m", sub: "deep work · this week" },
   { label: "Inbox", value: "3 unread", sub: "last cleared 2h ago" },
 ];
-
-export const dashboardCommandHint = "⌘K to jump anywhere";

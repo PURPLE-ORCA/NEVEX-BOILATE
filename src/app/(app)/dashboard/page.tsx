@@ -1,7 +1,6 @@
 import { AppShell } from "@/components/layout/app/app-shell";
 import { AppContentHeader } from "@/components/layout/app/app-content-header";
-import { dashboardCommandHint, dashboardDate, dashboardGreeting, dashboardShortcuts } from "@/components/data/dashboard";
-import { DashboardCommandHint } from "@/components/views/app/dashboard/dashboard-command-hint";
+import { dashboardDate, dashboardGreeting, dashboardShortcuts } from "@/components/data/dashboard";
 import { DashboardFacts } from "@/components/views/app/dashboard/dashboard-facts";
 import { DashboardHeader } from "@/components/views/app/dashboard/dashboard-header";
 import { DashboardSchedule } from "@/components/views/app/dashboard/dashboard-schedule";
@@ -28,7 +27,6 @@ export default function DashboardPage() {
 
       <DashboardFacts />
 
-      <DashboardCommandHint label={dashboardCommandHint} />
     </AppShell>
   );
 }

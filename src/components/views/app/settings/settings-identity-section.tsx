@@ -40,11 +40,6 @@ export function SettingsIdentitySection({ onDirtyChange }: SettingsIdentitySecti
         </Field>
 
         <Field>
-          <FieldLabel htmlFor="p-pron">Pronouns</FieldLabel>
-          <Input id="p-pron" placeholder="e.g. they / them" onChange={onDirtyChange} />
-        </Field>
-
-        <Field>
           <FieldLabel htmlFor="p-bio">Bio</FieldLabel>
           <Textarea
             id="p-bio"

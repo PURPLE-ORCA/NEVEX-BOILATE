@@ -18,12 +18,12 @@ export function SettingsPage() {
     <AppShell>
       <AppContentHeader title="Settings" />
 
-      <div className="mx-auto max-w-3xl pb-32">
+      <div className="mx-auto">
         <SettingsPhotoSection onDirtyChange={() => setDirty(true)} />
         <SettingsIdentitySection onDirtyChange={() => setDirty(true)} />
         <SettingsLocaleSection onDirtyChange={() => setDirty(true)} />
         <SettingsSecuritySection />
-      <SettingsSaveBar dirty={dirty} onDiscard={() => setDirty(false)} />
+        <SettingsSaveBar dirty={dirty} onDiscard={() => setDirty(false)} />
       </div>
 
     </AppShell>

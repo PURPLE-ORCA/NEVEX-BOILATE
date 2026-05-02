@@ -45,12 +45,12 @@ function SecurityRow({ icon, title, description, cta, destructive }: SecurityRow
   return (
     <div
       className={`flex items-center gap-4 rounded-lg border p-3.5 ${
-        destructive ? "border-destructive/40 bg-destructive/[0.03]" : "border-border/60 bg-background/40"
+        destructive ? "border-destructive/40 bg-destructive/3" : "border-border/60 bg-background/3"
       }`}
     >
       <div
         className={`flex size-8 shrink-0 items-center justify-center rounded-md ${
-          destructive ? "bg-destructive/10 text-destructive" : "bg-foreground/[0.06]"
+          destructive ? "bg-destructive/10 text-destructive" : "bg-foreground/5"
         }`}
       >
         {icon}
