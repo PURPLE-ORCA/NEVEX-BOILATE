@@ -33,13 +33,13 @@ interface TaskRowProps {
 
 function TaskRow({ task }: TaskRowProps) {
   return (
-    <li className="group flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-foreground/[0.03]">
+    <li className="group flex items-center gap-3 rounded-md px-2 py-2 transition-colors">
       <button
         type="button"
         className={`flex size-5 shrink-0 items-center justify-center rounded-full border transition-colors ${
           task.done
             ? "border-foreground/30 bg-foreground/10 text-foreground"
-            : "border-foreground/30 text-transparent hover:bg-foreground/[0.06]"
+            : "border-foreground/30 text-transparent"
         }`}
         aria-label="Toggle"
       >
@@ -50,7 +50,7 @@ function TaskRow({ task }: TaskRowProps) {
           {task.title}
         </Text>
       </span>
-      <span className="rounded bg-foreground/[0.05] px-1.5 py-0.5 font-mono uppercase tracking-[0.2em]">
+      <span className="rounded bg-foreground px-1.5 py-0.5 font-mono uppercase tracking-[0.2em]">
         <Text as="span" variant="xs">
           {task.project}
         </Text>

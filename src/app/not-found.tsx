@@ -6,19 +6,14 @@ import { Text } from "@/components/ui/text";
 
 export default function NotFound() {
   return (
-    <div className="relative min-h-svh overflow-hidden bg-background">
-      <Grid />
-      <div className="relative mx-auto flex min-h-svh max-w-3xl flex-col items-center justify-center px-6 text-center">
-        <Text variant="xs" className="mb-6 font-mono tracking-[0.4em]">
-          Status · 404
-        </Text>
+    <div className="relative min-h-svh">      <div className="relative mx-auto flex min-h-svh max-w-3xl flex-col items-center justify-center px-6 text-center">
 
         <BigNumerals />
 
         <Text as="h1" variant="h3" className="mt-10 max-w-md">
           We can't find that page.
         </Text>
-        <Text variant="muted" className="mt-2 max-w-sm text-balance text-sm">
+        <Text variant="muted" className="mt-2 max-w-sm ">
           The link may be old, or the page may have moved. Check URL or head back to somewhere you know.
         </Text>
 
@@ -46,9 +41,9 @@ function BigNumerals() {
     <Text
       as="div"
       variant="h1"
-      className="relative font-heading font-bold text-[clamp(8rem,22vw,16rem)] leading-none tracking-tighter"
+      className="relative font-bold text-[clamp(8rem,22vw,16rem)] leading-none tracking-tighter"
     >
-      <span className="bg-gradient-to-b from-foreground to-foreground/30 bg-clip-text text-transparent">
+      <span className="bg-linear-to-b from-foreground to-primary bg-clip-text text-transparent text-9xl">
         404
       </span>
       <div

@@ -28,7 +28,7 @@ interface ScheduleRowProps {
 
 function ScheduleRow({ event }: ScheduleRowProps) {
   return (
-    <li className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-foreground/[0.03]">
+    <li className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors">
       <div className="flex w-12 flex-col items-center">
         <Text as="span" variant="small" className="font-mono">
           {event.time}
