@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -31,10 +32,10 @@ export function AppContentHeader({ title }: AppContentHeaderProps) {
   const isDark = resolvedTheme === "dark";
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center">
       <SidebarTrigger />
 
-      <Text as="h1" variant="h3" className="flex-1 text-center">
+      <Text variant="h5" className="flex-1 text-center">
         {title}
       </Text>
 
@@ -58,17 +59,15 @@ export function AppContentHeader({ title }: AppContentHeaderProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <User className="mr-2 size-4" />
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="mr-2 size-4" />
-              Settings
+            <DropdownMenuItem asChild>
+              <Link href="/settings" className="flex items-center gap-2">
+                <Settings className="size-4" />
+                Settings
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <LogOut className="mr-2 size-4" />
+              <LogOut className="size-4" />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
